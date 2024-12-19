@@ -17,16 +17,36 @@ Page {
             // Поле поиска
             Row {
                 spacing: 10
+                leftPadding: 40
                 TextField {
                     id: searchField
                     placeholderText: "Search..."
                     anchors.verticalCenter: parent.verticalCenter
-                    width: parent.width * 0.8
+                    width: 400
                 }
                 ComboBox {
                     id: filterBox
+                    anchors.verticalCenter: parent.verticalCenter
                     model: ["All", "Guitars", "Basses", "Violins"]
                     currentIndex: 0
+                }
+                Item {
+                        width: 450 // Задаем отступ в 200 пикселей
+                        height: 1 // Минимальная высота
+                    }
+                Text {
+                    font.family: "MS Sans Serif"
+                    font.bold: true
+                    font.pointSize: 20
+                    text: "Ударные"
+                }
+                Button {
+                    id: returnToMenuBtn
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 50
+                    height: 30
+                    text: "Menu"
+                    onClicked: stackView.pop()
                 }
             }
 
@@ -43,10 +63,16 @@ Page {
                     spacing: 40
                     Repeater {
                         model: 15
-                        delegate: Button {
-                            text: "Instrument " + (index + 1)
-                            width: 190
-                            height: 190
+                        delegate: Column {
+                            Button {
+                                text: "Instrument " + (index + 1)
+                                width: 190
+                                height: 190
+                            }
+                            Text {
+                                text: "Guitar_name"
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
                         }
                     }
                 }
