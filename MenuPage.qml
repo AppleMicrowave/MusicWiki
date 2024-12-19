@@ -1,58 +1,59 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.0
-import QtQuick.Controls.TreeView
+import QtQuick.Controls 2.15
 
 Page {
-    id: secondPage
-    title: "Instrument Database"
+    id: menuPage
+    title: "Main Menu"
 
-    Column {
-        spacing: 10
+    Rectangle {
         anchors.fill: parent
-        anchors.margins: 20
+        color: "#FF7F7F"
 
-        // Поле для фильтрации
-        TextField {
-            id: filterField
-            placeholderText: "Type to filter..."
-            onTextChanged: treeView.search(text)
-        }
+        Column {
+            anchors.centerIn: parent
+            spacing: 20
 
-        // TreeView для отображения данных
-        TreeView {
-            id: treeView
-            anchors.fill: parent
+            Row {
+                spacing: 20
+                anchors.horizontalCenter: parent.horizontalCenter
 
-            // Пример колонок
-            model: ListModel {
-                ListElement { name: "Guitar"; type: "String"; price: "400$" }
-                ListElement { name: "Piano"; type: "Keyboard"; price: "1500$" }
-                ListElement { name: "Drums"; type: "Percussion"; price: "800$" }
+                Button {
+                    text: "Ударные"
+                    width: 250
+                    height: 400
+                }
+
+                Button {
+                    text: "Струнные"
+                    width: 250
+                    height: 400
+                    onClicked: stackView.push("SubListPage.qml")
+                }
+
+
+                Button {
+                    text: "Клавишные"
+                    width: 250
+                    height: 400
+                }
+
+                Button {
+                    text: "Духовые"
+                    width: 250
+                    height: 400
+                }
             }
 
-            TableViewColumn {
-                role: "name"
-                title: "Name"
-                width: 200
-            }
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
 
-            TableViewColumn {
-                role: "type"
-                title: "Type"
-                width: 150
+                Button {
+                    text: "Избранное"
+                    width: 1060
+                    height: 120
+                }
             }
-
-            TableViewColumn {
-                role: "price"
-                title: "Price"
-                width: 100
-            }
-        }
-
-        // Кнопка для возврата на предыдущую страницу
-        Button {
-            text: "Go Back"
-            onClicked: stackView.pop()
         }
     }
 }

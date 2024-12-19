@@ -20,6 +20,7 @@ qt_add_qml_module(appMusicWiki
         Main.qml
         WelcomePage.qml
         MenuPage.qml
+        QML_FILES SubListPage.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

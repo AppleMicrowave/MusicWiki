@@ -1,7 +1,7 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.15
 
-ApplicationWindow {
+Window {
     visible: true
     width: 1300
     height: 700
@@ -11,6 +11,6 @@ ApplicationWindow {
         id: stackView
         anchors.fill: parent
 
-        Component.onCompleted: stackView.push("WelcomePage.qml")
+        Component.onCompleted: stackView.push("SubListPage.qml")
     }
 }
