@@ -1,8 +1,16 @@
-import QtQuick
+import QtQuick 2.15
+import QtQuick.Controls 2.0
 
-Window {
-    width: 640
-    height: 480
+ApplicationWindow {
     visible: true
-    title: qsTr("Hello World")
+    width: 1300
+    height: 700
+    title: "Music Wiki"
+
+    StackView {
+        id: stackView
+        anchors.fill: parent
+
+        Component.onCompleted: stackView.push("WelcomePage.qml")
+    }
 }
