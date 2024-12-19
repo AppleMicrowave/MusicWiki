@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Sql)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -22,6 +23,7 @@ qt_add_qml_module(appMusicWiki
         MenuPage.qml
         QML_FILES SubListPage.qml
         SOURCES itemmanager.h itemmanager.cpp
+        SOURCES dbmanager.h dbmanager.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -36,7 +38,7 @@ set_target_properties(appMusicWiki PROPERTIES
 )
 
 target_link_libraries(appMusicWiki
-    PRIVATE Qt6::Quick Qt6::Widgets
+    PRIVATE Qt6::Quick Qt6::Widgets Qt6::Sql
 )
 
 include(GNUInstallDirs)

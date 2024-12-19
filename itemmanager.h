@@ -7,7 +7,8 @@
 class ItemManager {
 public:
     // Конструктор
-    ItemManager(const QString& type,
+    ItemManager(const QString& category,
+                const QString& type,
                 const QString& kind,
                 const QString& name,
                 double price,
@@ -16,6 +17,7 @@ public:
                 const QString& imagePath);
 
     // Геттеры
+    QString getCategory() const;
     QString getType() const;
     QString getKind() const;
     QString getName() const;
@@ -25,6 +27,7 @@ public:
     QString getImagePath() const;
 
     // Сеттеры
+    void setCategory(const QString& category);
     void setType(const QString& type);
     void setKind(const QString& kind);
     void setName(const QString& name);
@@ -34,6 +37,7 @@ public:
     void setImagePath(const QString& imagePath);
 
 private:
+    QString m_category;        // Категория (Струнные, Ударные)
     QString m_type;            // Тип инструмента (Смычковые, Щипковые)
     QString m_kind;            // Разновидность инструмента (Акустическая гитара, Электрогитара и т.д.)
     QString m_name;            // Наименование инструмента
