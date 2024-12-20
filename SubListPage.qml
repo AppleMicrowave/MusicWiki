@@ -15,32 +15,33 @@ Page {
             anchors.fill: parent
             anchors.margins: 20
 
-            // Поле поиска
+
             Row {
                 spacing: 10
                 leftPadding: 40
+
+                // Поле поиска
                 TextField {
                     id: searchField
-                    placeholderText: "Search..."
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 400
-
+                    placeholderText: "Введите запрос для поиска"
                     onTextChanged: {
-                        if (dbManager.itemModel) {
-                            dbManager.itemModel.filterItemsFromQml(searchField.text);
-                        }
+                        //console.log("Поисковый запрос:", searchField.text);
+                        itemModel.filterItems(searchField.text, filterBox.currentText);
                     }
                 }
+                // Комбобокс для выбора фильтра
                 ComboBox {
                     id: filterBox
-                    anchors.verticalCenter: parent.verticalCenter
-                    model: ["All", "Guitars", "Basses", "Violins"]
-                    currentIndex: 0
+                    model: ["Тип", "Вид", "Название", "Вендер"]
+                    onCurrentTextChanged: {
+                        //console.log("Выбран фильтр:", filterBox.currentText);
+                        itemModel.filterItems(searchField.text, filterBox.currentText);
+                    }
                 }
                 Item {
-                        width: 550
-                        height: 1
-                    }
+                    width: 750
+                    height: 1
+                }
                 // Text {
                 //     id: category_name
                 //     font.family: "Century Schoolbook"

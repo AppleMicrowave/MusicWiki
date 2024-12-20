@@ -25,19 +25,18 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    void filterItems(const QString &query);
-
     QHash<int, QByteArray> roleNames() const override;
 
     void setItems(const QVector<ItemManager> &items);
     void addItem(const ItemManager &item);
 
 public slots:
-    void filterItemsFromQml(const QString &query);
+    void filterItems(const QString &query, const QString &filterField);
+    void filterItemsFromQml(const QString &query, const QString &filterField);
 
 private:
-    QVector<ItemManager> m_items; // Хранилище данных
-    QVector<ItemManager> m_originalItems; // Оригинальные элементы (полный список)
+    QVector<ItemManager> m_items;         // Хранилище данных для отображения
+    QVector<ItemManager> m_originalItems; // Полный список (для фильтрации)
 };
 
 #endif // ITEMMODEL_H

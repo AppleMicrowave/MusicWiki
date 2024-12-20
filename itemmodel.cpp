@@ -37,28 +37,42 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
     }
 }
 
-void ItemModel::filterItems(const QString &query) {
-    QString lowerQuery = query.toLower();
-    if (query.isEmpty()) {
-        // Если запрос пустой, сбрасываем фильтр
-        beginResetModel();
-        m_items = m_originalItems;
-        endResetModel();
-        return;
-    }
+void ItemModel::filterItems(const QString &query, const QString &filterField) {
+    //qDebug() << "Фильтрация начата. Запрос:" << query << "Поле фильтрации:" << filterField;
 
-    QVector<ItemManager> filteredItems;
-    for (const auto &item : m_originalItems) {
-        if (item.getName().toLower().contains(lowerQuery) ||
-            item.getKind().toLower().contains(lowerQuery)) {
-            filteredItems.append(item);
+    beginResetModel();
+    m_items.clear();
+
+    if (query.isEmpty()) {
+        m_items = m_originalItems; // Возвращаем все элементы, если запрос пуст
+    } else {
+        for (const ItemManager &item : m_originalItems) {
+            QString fieldValue;
+
+            if (filterField == "Тип") {
+                fieldValue = item.getType();
+            } else if (filterField == "Вид") {
+                fieldValue = item.getKind();
+            } else if (filterField == "Название") {
+                fieldValue = item.getName();
+            } else if (filterField == "Вендер") {
+                fieldValue = item.getManufacturers().join(", ");
+            } else {
+                fieldValue.clear();
+            }
+
+            // Проверяем совпадение
+            if (!fieldValue.isEmpty() && fieldValue.contains(query, Qt::CaseInsensitive)) {
+                m_items.append(item);
+            }
         }
     }
 
-    beginResetModel();
-    m_items = filteredItems;
     endResetModel();
+    //qDebug() << "Фильтрация завершена. Количество элементов:" << m_items.size();
 }
+
+
 
 QHash<int, QByteArray> ItemModel::roleNames() const {
     return {
@@ -86,6 +100,6 @@ void ItemModel::addItem(const ItemManager &item) {
     endInsertRows();
 }
 
-void ItemModel::filterItemsFromQml(const QString &query) {
-    filterItems(query);
+void ItemModel::filterItemsFromQml(const QString &query, const QString &filterType) {
+    filterItems(query, filterType);
 }
