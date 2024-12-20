@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 #include <QList>
 #include <QVariant>
 
@@ -25,6 +27,14 @@ public:
 
     // Метод для чтения всех записей
     QList<ItemManager> getAllItems();
+    void clearTable() {
+        QSqlQuery query;
+        if (!query.exec("DELETE FROM items")) {
+            qDebug() << "Ошибка при очистке таблицы:" << query.lastError().text();
+        } else {
+            qDebug() << "Таблица успешно очищена.";
+        }
+    }
 
 private:
     QSqlDatabase m_db;

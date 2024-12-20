@@ -56,18 +56,19 @@ bool DBManager::deleteItem(const QString& name) {
 
 QList<ItemManager> DBManager::getAllItems() {
     QList<ItemManager> items;
-    QSqlQuery query("SELECT type, kind, name, price, description, manufacturers, imagePath FROM items");
+    QSqlQuery query("SELECT category, type, kind, name, price, description, manufacturers, imagePath FROM items");
 
     while (query.next()) {
-        QString type = query.value(0).toString();
-        QString kind = query.value(1).toString();
-        QString name = query.value(2).toString();
-        double price = query.value(3).toDouble();
-        QString description = query.value(4).toString();
-        QList<QString> manufacturers = query.value(5).toString().split(","); // Разделяем строку в список
-        QString imagePath = query.value(6).toString();
+        QString category = query.value(0).toString();
+        QString type = query.value(1).toString();
+        QString kind = query.value(2).toString();
+        QString name = query.value(3).toString();
+        double price = query.value(4).toDouble();
+        QString description = query.value(5).toString();
+        QList<QString> manufacturers = query.value(6).toString().split(","); // Разделяем строку в список
+        QString imagePath = query.value(7).toString();
 
-        items.append(ItemManager(type, kind, name, price, description, manufacturers, imagePath));
+        items.append(ItemManager(category, type, kind, name, price, description, manufacturers, imagePath));
     }
     return items;
 }

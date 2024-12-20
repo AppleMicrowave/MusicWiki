@@ -31,8 +31,8 @@ Page {
                     currentIndex: 0
                 }
                 Item {
-                        width: 450 // Задаем отступ в 200 пикселей
-                        height: 1 // Минимальная высота
+                        width: 450
+                        height: 1
                     }
                 Text {
                     font.family: "MS Sans Serif"

@@ -36,13 +36,7 @@ int main(int argc, char *argv[])
     QList<ItemManager> items = dbManager.getAllItems();
     qDebug() << "Список всех записей в базе данных:";
     for (const auto& item : items) {
-        qDebug() << "Тип:" << item.getType()
-            << ", Разновидность:" << item.getKind()
-            << ", Название:" << item.getName()
-            << ", Цена:" << item.getPrice()
-            << ", Описание:" << item.getDescription()
-            << ", Производители:" << item.getManufacturers().join(", ")
-            << ", Путь к изображению:" << item.getImagePath();
+        qDebug() << item.getCategory();
     }
 
 
