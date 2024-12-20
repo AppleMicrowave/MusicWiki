@@ -22,7 +22,7 @@ public:
 
     explicit ItemModel(QObject *parent = nullptr);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Q_INVOKABLE QStringList getUniqueValues(const QString &propertyName) const;
     Q_INVOKABLE void filterItemsByProperty(const QString &propertyName, const QString &value);

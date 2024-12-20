@@ -5,14 +5,14 @@ Page {
     id: subListPage
     title: "Instrument List"
 
+    property var dbManager: null
+
     function applyFilters() {
-        // Получаем текущие значения
         let searchText = searchField.text || "";
         let property = propertyBox.currentText === "--Без фильтра--" ? "" : propertyBox.currentText;
         let variant = variantBox.currentText || "";
         let filter = filterBox.currentText || "";
 
-        // Если все значения пусты, сбрасываем фильтры
         if (searchText === "" && property === "" && variant === "" && filter === "") {
             dbManager.itemModel.setItems(dbManager.itemModel.originalItems);
         } else {
@@ -34,34 +34,26 @@ Page {
                 spacing: 10
                 leftPadding: 40
 
-                // Поле поиска
                 TextField {
                     id: searchField
                     placeholderText: "Поиск..."
-
                     width: 200
                     height: 31
                     font.pixelSize: 16
 
-                    onTextChanged: {
-                        applyFilters();
-                    }
+                    onTextChanged: applyFilters();
                 }
-                // Комбобокс для выбора фильтра
+
                 ComboBox {
                     id: filterBox
-
                     width: 150
                     height: 30
                     model: ["Название", "Вендер"]
-                    onCurrentTextChanged: {
-                        applyFilters();
-                    }
+                    onCurrentTextChanged: applyFilters();
                 }
 
                 ComboBox {
                     id: propertyBox
-
                     width: 150
                     height: 30
                     model: ["--Без фильтра--", "Тип", "Вид"]
@@ -77,12 +69,9 @@ Page {
 
                 ComboBox {
                     id: variantBox
-
                     width: 150
                     height: 30
-                    onCurrentTextChanged: {
-                        applyFilters();
-                    }
+                    onCurrentTextChanged: applyFilters();
                 }
 
                 Item {
@@ -114,14 +103,27 @@ Page {
                     Repeater {
                         model: dbManager.itemModel ? dbManager.itemModel : []
                         delegate: Column {
+
                             Button {
                                 text: model.name
                                 width: 190
                                 height: 190
+                                onClicked: {
+                                    stackView.push("ItemDetailsPage.qml", {
+                                        itemData: {
+                                            name: model.name,
+                                            imagePath: model.imagePath,
+                                            description: model.description,
+                                            manufacturers: model.manufacturers,
+                                            price: model.price
+                                        }
+                                    });
+                                }
                             }
+
                             Text {
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                text: model.kind + " " + model.name
+                                text: model.name
                                 horizontalAlignment: Text.AlignHCenter
                                 font.pointSize: 8
                                 wrapMode: Text.WordWrap
