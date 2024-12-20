@@ -4,7 +4,8 @@
 #include <QSqlRecord>
 #include <QDebug>
 
-DBManager::DBManager(const QString& dbPath) {
+DBManager::DBManager(const QString& dbPath, QObject* parent)
+    : QObject(parent) {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(dbPath);
 
@@ -14,6 +15,9 @@ DBManager::DBManager(const QString& dbPath) {
         qDebug() << "База данных успешно открыта.";
         initializeDatabase();
     }
+
+    // Устанавливаем данные в модель
+    m_itemModel.setItems(getAllItems());
 }
 
 DBManager::~DBManager() {
@@ -22,11 +26,17 @@ DBManager::~DBManager() {
     }
 }
 
-bool DBManager::addItem(const QString& type, const QString& kind, const QString& name, double price,
+ItemModel* DBManager::itemModel() {
+    m_itemModel.setItems(getAllItems());
+    return &m_itemModel;
+}
+
+bool DBManager::addItem(const QString& category, const QString& type, const QString& kind, const QString& name, double price,
                         const QString& description, const QString& manufacturers, const QString& imagePath) {
     QSqlQuery query;
-    query.prepare("INSERT INTO items (type, kind, name, price, description, manufacturers, imagePath) "
-                  "VALUES (:type, :kind, :name, :price, :description, :manufacturers, :imagePath)");
+    query.prepare("INSERT INTO items (category, type, kind, name, price, description, manufacturers, imagePath) "
+                  "VALUES (:category, :type, :kind, :name, :price, :description, :manufacturers, :imagePath)");
+    query.bindValue("category", category);
     query.bindValue(":type", type);
     query.bindValue(":kind", kind);
     query.bindValue(":name", name);

@@ -1,32 +1,29 @@
 #ifndef DBMANAGER_H
 #define DBMANAGER_H
 
+#include <QObject>
 #include <QString>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QList>
 #include <QVariant>
+#include "ItemManager.h"
+#include "itemmodel.h"
 
-#include "itemmanager.h"
+class DBManager : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(ItemModel* itemModel READ itemModel CONSTANT)
 
-class DBManager {
 public:
-    // Конструктор
-    explicit DBManager(const QString& dbPath);
-
-    // Деструктор
+    explicit DBManager(const QString& dbPath, QObject* parent = nullptr);
     ~DBManager();
 
-    // Метод для добавления записи
-    bool addItem(const QString& type, const QString& kind, const QString& name, double price,
+    bool addItem(const QString& category, const QString& type, const QString& kind, const QString& name, double price,
                  const QString& description, const QString& manufacturers, const QString& imagePath);
-
-    // Метод для удаления записи по имени
     bool deleteItem(const QString& name);
-
-    // Метод для чтения всех записей
     QList<ItemManager> getAllItems();
+    ItemModel* itemModel();
     void clearTable() {
         QSqlQuery query;
         if (!query.exec("DELETE FROM items")) {
@@ -38,8 +35,7 @@ public:
 
 private:
     QSqlDatabase m_db;
-
-    // Метод для инициализации таблицы, если она не существует
+    ItemModel m_itemModel;
     void initializeDatabase();
 };
 

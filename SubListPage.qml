@@ -10,6 +10,7 @@ Page {
         color: "#FF7F7F"
 
         Column {
+            height: 600
             spacing: 10
             anchors.fill: parent
             anchors.margins: 20
@@ -23,6 +24,12 @@ Page {
                     placeholderText: "Search..."
                     anchors.verticalCenter: parent.verticalCenter
                     width: 400
+
+                    onTextChanged: {
+                        if (dbManager.itemModel) {
+                            dbManager.itemModel.filterItemsFromQml(searchField.text);
+                        }
+                    }
                 }
                 ComboBox {
                     id: filterBox
@@ -31,21 +38,22 @@ Page {
                     currentIndex: 0
                 }
                 Item {
-                        width: 450
+                        width: 550
                         height: 1
                     }
-                Text {
-                    font.family: "MS Sans Serif"
-                    font.bold: true
-                    font.pointSize: 20
-                    text: "Ударные"
-                }
+                // Text {
+                //     id: category_name
+                //     font.family: "Century Schoolbook"
+                //     font.bold: true
+                //     font.pointSize: 20
+                //     text: "" + dbManager.itemModel.category
+                // }
                 Button {
                     id: returnToMenuBtn
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 50
-                    height: 30
-                    text: "Menu"
+                    width: 100
+                    height: 40
+                    text: "Назад"
                     onClicked: stackView.pop()
                 }
             }
@@ -56,22 +64,28 @@ Page {
                 anchors.topMargin: 60
                 anchors.leftMargin: 40
                 contentWidth: 1100
-                contentHeight: 700
+                contentHeight: 750
+                height: 700
 
                 Flow {
                     width: 1200
                     spacing: 40
                     Repeater {
-                        model: 15
+                        model: dbManager.itemModel ? dbManager.itemModel : []
                         delegate: Column {
                             Button {
-                                text: "Instrument " + (index + 1)
+                                text: model.name // Используем роль "name"
                                 width: 190
                                 height: 190
                             }
                             Text {
-                                text: "Guitar_name"
                                 anchors.horizontalCenter: parent.horizontalCenter
+                                text: model.kind + " " + model.name
+                                horizontalAlignment: Text.AlignHCenter
+                                font.pointSize: 8
+
+                                wrapMode: Text.WordWrap
+                                width: parent.width
                             }
                         }
                     }

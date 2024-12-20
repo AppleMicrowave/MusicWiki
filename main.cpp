@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QDebug>
+#include <QQmlContext>
 #include "dbmanager.h"
 #include "itemmanager.h"
 
@@ -33,11 +34,11 @@ int main(int argc, char *argv[])
 
     // Чтение всех записей
     // Чтение всех записей
-    QList<ItemManager> items = dbManager.getAllItems();
-    qDebug() << "Список всех записей в базе данных:";
-    for (const auto& item : items) {
-        qDebug() << item.getCategory();
-    }
+    // QList<ItemManager> items = dbManager.getAllItems();
+    // qDebug() << "Список всех записей в базе данных:";
+    // for (const auto& item : items) {
+    //     qDebug() << item.getCategory();
+    // }
 
 
     // // Удаление записи по имени
@@ -51,6 +52,10 @@ int main(int argc, char *argv[])
     // for (const auto& item : items) {
     //     qDebug() << item;
     // }
+
+
+    engine.rootContext()->setContextProperty("dbManager", &dbManager);
+    engine.rootContext()->setContextProperty("itemModel", dbManager.itemModel());
 
     engine.loadFromModule("MusicWiki", "Main");
 

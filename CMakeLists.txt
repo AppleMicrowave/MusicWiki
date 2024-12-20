@@ -24,6 +24,7 @@ qt_add_qml_module(appMusicWiki
         QML_FILES SubListPage.qml
         SOURCES itemmanager.h itemmanager.cpp
         SOURCES dbmanager.h dbmanager.cpp
+        SOURCES itemmodel.h itemmodel.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
