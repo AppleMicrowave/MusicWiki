@@ -6,6 +6,8 @@ Page {
     title: "First Page"
 
     Rectangle {
+        id: welcome
+
         anchors.centerIn: parent
         width: 200
         height: 100
@@ -21,11 +23,11 @@ Page {
     }
 
     Button {
-        text: "Go to Second Page"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20
+        text: ""
+        anchors.left: welcome.left
+        width: 400
+        height: 200
 
-        onClicked: stackView.push("MenuPage.qml")
+        onClicked: stackView.push("SubListPage.qml", { "dbManager": dbManager })
     }
 }

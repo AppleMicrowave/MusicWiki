@@ -46,7 +46,6 @@ QStringList ItemModel::getUniqueValues(const QString &propertyName) const {
         } else if (propertyName == "Вид") {
             uniqueValues.insert(item.getKind());
         }
-        // Добавляйте дополнительные условия, если нужно
     }
 
     return QStringList(uniqueValues.begin(), uniqueValues.end());
@@ -67,49 +66,10 @@ void ItemModel::filterItemsByProperty(const QString &propertyName, const QString
         } else if (propertyName == "Вид" && item.getKind() == value) {
             filteredItems.append(item);
         }
-        // Добавьте дополнительные свойства, если нужно
     }
 
     setItems(filteredItems);
 }
-
-
-// void ItemModel::filterItems(const QString &query, const QString &filterField) {
-//     //qDebug() << "Фильтрация начата. Запрос:" << query << "Поле фильтрации:" << filterField;
-
-//     beginResetModel();
-//     m_items.clear();
-
-//     if (query.isEmpty()) {
-//         m_items = m_originalItems; // Возвращаем все элементы, если запрос пуст
-//     } else {
-//         for (const ItemManager &item : m_originalItems) {
-//             QString fieldValue;
-
-//             if (filterField == "Тип") {
-//                 fieldValue = item.getType();
-//             } else if (filterField == "Вид") {
-//                 fieldValue = item.getKind();
-//             } else if (filterField == "Название") {
-//                 fieldValue = item.getName();
-//             } else if (filterField == "Вендер") {
-//                 fieldValue = item.getManufacturers().join(", ");
-//             } else {
-//                 fieldValue.clear();
-//             }
-
-//             // Проверяем совпадение
-//             if (!fieldValue.isEmpty() && fieldValue.contains(query, Qt::CaseInsensitive)) {
-//                 m_items.append(item);
-//             }
-//         }
-//     }
-
-//     endResetModel();
-//     //qDebug() << "Фильтрация завершена. Количество элементов:" << m_items.size();
-// }
-
-
 
 QHash<int, QByteArray> ItemModel::roleNames() const {
     return {
@@ -162,10 +122,3 @@ void ItemModel::filterItems(const QString &searchText, const QString &propertyNa
 
     setItems(filteredItems);
 }
-
-
-
-
-// void ItemModel::filterItemsFromQml(const QString &query, const QString &filterType) {
-//     filterItems(query, filterType);
-// }
