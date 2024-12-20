@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Basic
 
 Page {
     id: subListPage
@@ -94,7 +95,7 @@ Page {
                 anchors.topMargin: 60
                 anchors.leftMargin: 40
                 contentWidth: 1100
-                contentHeight: 750
+                contentHeight: 2000
                 height: 700
 
                 Flow {
@@ -103,11 +104,25 @@ Page {
                     Repeater {
                         model: dbManager.itemModel ? dbManager.itemModel : []
                         delegate: Column {
+                            property string imagePath: model.imagePath
 
                             Button {
-                                text: model.name
+                                id: itemButton
                                 width: 190
                                 height: 190
+                                background: Rectangle {
+                                    color: "#FFFFFF"
+                                    border.color: "black"
+
+                                    Image {
+                                        anchors.fill: parent
+                                        source: imagePath
+                                        fillMode: Image.PreserveAspectFit
+                                        cache: true // Включаем кеширование
+                                    }
+                                }
+
+                                //text: model.name
                                 onClicked: {
                                     stackView.push("ItemDetailsPage.qml", {
                                         itemData: {

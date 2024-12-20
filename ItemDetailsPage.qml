@@ -24,7 +24,7 @@ Page {
 
         // Изображение инструмента
         Image {
-            source: itemData.imagePath || ""
+            source: itemData.imagePath
             width: 400
             height: 400
             fillMode: Image.PreserveAspectFit
