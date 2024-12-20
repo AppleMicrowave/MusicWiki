@@ -24,6 +24,8 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Q_INVOKABLE QStringList getUniqueValues(const QString &propertyName) const;
+    Q_INVOKABLE void filterItemsByProperty(const QString &propertyName, const QString &value);
 
     QHash<int, QByteArray> roleNames() const override;
 
@@ -31,8 +33,9 @@ public:
     void addItem(const ItemManager &item);
 
 public slots:
-    void filterItems(const QString &query, const QString &filterField);
-    void filterItemsFromQml(const QString &query, const QString &filterField);
+    Q_INVOKABLE void filterItems(const QString &searchText, const QString &propertyName, const QString &value, const QString &filter);
+
+    //void filterItemsFromQml(const QString &query, const QString &filterField);
 
 private:
     QVector<ItemManager> m_items;         // Хранилище данных для отображения

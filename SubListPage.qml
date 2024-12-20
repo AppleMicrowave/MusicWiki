@@ -5,6 +5,21 @@ Page {
     id: subListPage
     title: "Instrument List"
 
+    function applyFilters() {
+        // Получаем текущие значения
+        let searchText = searchField.text || "";
+        let property = propertyBox.currentText === "--Без фильтра--" ? "" : propertyBox.currentText;
+        let variant = variantBox.currentText || "";
+        let filter = filterBox.currentText || "";
+
+        // Если все значения пусты, сбрасываем фильтры
+        if (searchText === "" && property === "" && variant === "" && filter === "") {
+            dbManager.itemModel.setItems(dbManager.itemModel.originalItems);
+        } else {
+            dbManager.itemModel.filterItems(searchText, property, variant, filter);
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
         color: "#FF7F7F"
@@ -15,7 +30,6 @@ Page {
             anchors.fill: parent
             anchors.margins: 20
 
-
             Row {
                 spacing: 10
                 leftPadding: 40
@@ -23,32 +37,59 @@ Page {
                 // Поле поиска
                 TextField {
                     id: searchField
-                    placeholderText: "Введите запрос для поиска"
+                    placeholderText: "Поиск..."
+
+                    width: 200
+                    height: 31
+                    font.pixelSize: 16
+
                     onTextChanged: {
-                        //console.log("Поисковый запрос:", searchField.text);
-                        itemModel.filterItems(searchField.text, filterBox.currentText);
+                        applyFilters();
                     }
                 }
                 // Комбобокс для выбора фильтра
                 ComboBox {
                     id: filterBox
-                    model: ["Тип", "Вид", "Название", "Вендер"]
+
+                    width: 150
+                    height: 30
+                    model: ["Название", "Вендер"]
                     onCurrentTextChanged: {
-                        //console.log("Выбран фильтр:", filterBox.currentText);
-                        itemModel.filterItems(searchField.text, filterBox.currentText);
+                        applyFilters();
                     }
                 }
+
+                ComboBox {
+                    id: propertyBox
+
+                    width: 150
+                    height: 30
+                    model: ["--Без фильтра--", "Тип", "Вид"]
+                    onCurrentTextChanged: {
+                        if (currentText === "--Без фильтра--") {
+                            variantBox.model = [];
+                        } else {
+                            variantBox.model = dbManager.itemModel ? dbManager.itemModel.getUniqueValues(currentText) : [];
+                        }
+                        applyFilters();
+                    }
+                }
+
+                ComboBox {
+                    id: variantBox
+
+                    width: 150
+                    height: 30
+                    onCurrentTextChanged: {
+                        applyFilters();
+                    }
+                }
+
                 Item {
-                    width: 750
+                    width: 400
                     height: 1
                 }
-                // Text {
-                //     id: category_name
-                //     font.family: "Century Schoolbook"
-                //     font.bold: true
-                //     font.pointSize: 20
-                //     text: "" + dbManager.itemModel.category
-                // }
+
                 Button {
                     id: returnToMenuBtn
                     anchors.verticalCenter: parent.verticalCenter
@@ -59,7 +100,6 @@ Page {
                 }
             }
 
-            // Каркас для меню списка
             ScrollView {
                 anchors.fill: parent
                 anchors.topMargin: 60
@@ -75,7 +115,7 @@ Page {
                         model: dbManager.itemModel ? dbManager.itemModel : []
                         delegate: Column {
                             Button {
-                                text: model.name // Используем роль "name"
+                                text: model.name
                                 width: 190
                                 height: 190
                             }
@@ -84,7 +124,6 @@ Page {
                                 text: model.kind + " " + model.name
                                 horizontalAlignment: Text.AlignHCenter
                                 font.pointSize: 8
-
                                 wrapMode: Text.WordWrap
                                 width: parent.width
                             }

@@ -11,6 +11,6 @@ Window {
         id: stackView
         anchors.fill: parent
 
-        Component.onCompleted: stackView.push("WelcomePage.qml")
+        Component.onCompleted: stackView.push("SubListPage.qml")
     }
 }

@@ -37,40 +37,77 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
     }
 }
 
-void ItemModel::filterItems(const QString &query, const QString &filterField) {
-    //qDebug() << "Фильтрация начата. Запрос:" << query << "Поле фильтрации:" << filterField;
+QStringList ItemModel::getUniqueValues(const QString &propertyName) const {
+    QSet<QString> uniqueValues;
 
-    beginResetModel();
-    m_items.clear();
-
-    if (query.isEmpty()) {
-        m_items = m_originalItems; // Возвращаем все элементы, если запрос пуст
-    } else {
-        for (const ItemManager &item : m_originalItems) {
-            QString fieldValue;
-
-            if (filterField == "Тип") {
-                fieldValue = item.getType();
-            } else if (filterField == "Вид") {
-                fieldValue = item.getKind();
-            } else if (filterField == "Название") {
-                fieldValue = item.getName();
-            } else if (filterField == "Вендер") {
-                fieldValue = item.getManufacturers().join(", ");
-            } else {
-                fieldValue.clear();
-            }
-
-            // Проверяем совпадение
-            if (!fieldValue.isEmpty() && fieldValue.contains(query, Qt::CaseInsensitive)) {
-                m_items.append(item);
-            }
+    for (const auto &item : m_items) { // m_items — это ваш внутренний список элементов
+        if (propertyName == "Тип") {
+            uniqueValues.insert(item.getType());
+        } else if (propertyName == "Вид") {
+            uniqueValues.insert(item.getKind());
         }
+        // Добавляйте дополнительные условия, если нужно
     }
 
-    endResetModel();
-    //qDebug() << "Фильтрация завершена. Количество элементов:" << m_items.size();
+    return QStringList(uniqueValues.begin(), uniqueValues.end());
 }
+
+void ItemModel::filterItemsByProperty(const QString &propertyName, const QString &value) {
+    if (propertyName.isEmpty()) {
+        // Если свойство не выбрано, показываем все элементы
+        setItems(m_originalItems);
+        return;
+    }
+
+    QList<ItemManager> filteredItems;
+
+    for (const auto &item : m_originalItems) {
+        if (propertyName == "Тип" && item.getType() == value) {
+            filteredItems.append(item);
+        } else if (propertyName == "Вид" && item.getKind() == value) {
+            filteredItems.append(item);
+        }
+        // Добавьте дополнительные свойства, если нужно
+    }
+
+    setItems(filteredItems);
+}
+
+
+// void ItemModel::filterItems(const QString &query, const QString &filterField) {
+//     //qDebug() << "Фильтрация начата. Запрос:" << query << "Поле фильтрации:" << filterField;
+
+//     beginResetModel();
+//     m_items.clear();
+
+//     if (query.isEmpty()) {
+//         m_items = m_originalItems; // Возвращаем все элементы, если запрос пуст
+//     } else {
+//         for (const ItemManager &item : m_originalItems) {
+//             QString fieldValue;
+
+//             if (filterField == "Тип") {
+//                 fieldValue = item.getType();
+//             } else if (filterField == "Вид") {
+//                 fieldValue = item.getKind();
+//             } else if (filterField == "Название") {
+//                 fieldValue = item.getName();
+//             } else if (filterField == "Вендер") {
+//                 fieldValue = item.getManufacturers().join(", ");
+//             } else {
+//                 fieldValue.clear();
+//             }
+
+//             // Проверяем совпадение
+//             if (!fieldValue.isEmpty() && fieldValue.contains(query, Qt::CaseInsensitive)) {
+//                 m_items.append(item);
+//             }
+//         }
+//     }
+
+//     endResetModel();
+//     //qDebug() << "Фильтрация завершена. Количество элементов:" << m_items.size();
+// }
 
 
 
@@ -100,6 +137,35 @@ void ItemModel::addItem(const ItemManager &item) {
     endInsertRows();
 }
 
-void ItemModel::filterItemsFromQml(const QString &query, const QString &filterType) {
-    filterItems(query, filterType);
+void ItemModel::filterItems(const QString &searchText, const QString &propertyName, const QString &value, const QString &filter) {
+    QList<ItemManager> filteredItems;
+
+    // Если searchText и propertyName пусты, возвращаем оригинальный список
+    if (searchText.isEmpty() && propertyName.isEmpty()) {
+        setItems(m_originalItems);
+        return;
+    }
+
+    for (const auto &item : m_originalItems) {
+        bool matchesSearch = searchText.isEmpty() ||
+                             (filter == "Название" && item.getName().contains(searchText, Qt::CaseInsensitive)) ||
+                             (filter == "Вендер" && item.getManufacturers().join(",").contains(searchText, Qt::CaseInsensitive));
+
+        bool matchesProperty = propertyName.isEmpty() ||
+                               (propertyName == "Тип" && item.getType() == value) ||
+                               (propertyName == "Вид" && item.getKind() == value);
+
+        if (matchesSearch && matchesProperty) {
+            filteredItems.append(item);
+        }
+    }
+
+    setItems(filteredItems);
 }
+
+
+
+
+// void ItemModel::filterItemsFromQml(const QString &query, const QString &filterType) {
+//     filterItems(query, filterType);
+// }
