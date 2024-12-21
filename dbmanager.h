@@ -22,8 +22,14 @@ public:
     bool addItem(const QString& category, const QString& type, const QString& kind, const QString& name, double price,
                  const QString& description, const QString& manufacturers, const QString& imagePath);
     bool deleteItem(const QString& name);
+
+    Q_INVOKABLE bool addItemToFavorites(const QString& itemName);
+    Q_INVOKABLE bool removeItemFromFavorites(const QString& itemName);
+    Q_INVOKABLE void filterItemsByFavorites(bool onlyFavorites);
+
     QList<ItemManager> getAllItems();
     ItemModel* itemModel();
+
     void clearTable() {
         QSqlQuery query;
         if (!query.exec("DELETE FROM items")) {

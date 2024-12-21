@@ -75,9 +75,16 @@ Page {
                     onCurrentTextChanged: applyFilters();
                 }
 
-                Item {
-                    width: 400
-                    height: 1
+                Switch {
+                    id: favoriteSwitch
+                    text: "Показывать только Избранные"
+                    onToggled: {
+                        if (favoriteSwitch.checked) {
+                            dbManager.filterItemsByFavorites(true);
+                        } else {
+                            dbManager.filterItemsByFavorites(false);
+                        }
+                    }
                 }
 
                 Button {
@@ -126,6 +133,8 @@ Page {
                                 onClicked: {
                                     stackView.push("ItemDetailsPage.qml", {
                                         itemData: {
+                                            type: model.type,
+                                            kind: model.kind,
                                             name: model.name,
                                             imagePath: model.imagePath,
                                             description: model.description,

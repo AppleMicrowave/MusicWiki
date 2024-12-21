@@ -1,68 +1,163 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Page {
-    id: itemDetailsPage
-    title: itemData.name || "Детали инструмента"
+    id: detailsPage
+    title: "Item Details"
 
     property var itemData: {}
 
-    Column {
+    // Основной макет страницы
+    Rectangle {
         anchors.fill: parent
-        spacing: 20
-        anchors.margins: 20
+        color: "#FF5F5F"
 
-        // Название инструмента
+        // Макет содержимого
+        Row {
+            anchors.fill: parent
+            anchors.margins: 20
+            spacing: 70
+            width: 300
+
+            // Изображение инструмента
+            Rectangle {
+                width: parent.width / 3
+                height: parent.height - 40
+                color: "white"
+                border.color: "black"
+                border.width: 5
+
+                Image {
+                    anchors.fill: parent
+                    anchors.margins: 20
+                    source: itemData.imagePath // Замените на путь к изображению
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
+
+            // Описание инструмента
+            ColumnLayout {
+                spacing: 10
+
+                Text {
+                    text: "Тип: " + itemData.type
+                    font.pixelSize: 24
+                    font.bold: true
+                    color: "black"
+                }
+
+                Text {
+                    text: "Вид: " + itemData.kind
+                    font.pixelSize: 24
+                    font.bold: true
+                    color: "black"
+                }
+
+                Text {
+                    text: "Наименование: " + itemData.name
+                    font.pixelSize: 24
+                    font.bold: true
+                    color: "black"
+                }
+
+                Text {
+                    text: "Цена: ~" + itemData.price
+                    font.pixelSize: 24
+                    font.bold: true
+                    color: "black"
+                }
+
+                Text {
+                    text: "Описание: " + itemData.description
+                    wrapMode: Text.WordWrap
+
+                    font.pixelSize: 24
+                    font.bold: true
+                    color: "black"
+                }
+
+                Text {
+                    text: "Крупные производители: " + itemData.manufacturers
+                    font.pixelSize: 24
+                    font.bold: true
+                    color: "black"
+                }
+            }
+        }
+
+        // Кнопки внизу
+        Row {
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+            bottomPadding: 60
+            //margins: 20
+
+            Button {
+                text: "+"
+                width: 100
+                height: 50
+                onClicked: {
+                    dbManager.addItemToFavorites(itemData.name) // Метод для добавления в избранное
+                    favoriteDialog.open() // Показываем сообщение
+                }
+            }
+
+            Button {
+                text: "⟳"
+                width: 100
+                height: 50
+                onClicked: stackView.pop() // Возврат в меню
+            }
+
+            Button {
+                text: "-"
+                width: 100
+                height: 50
+                onClicked: {
+                    dbManager.removeItemFromFavorites(itemData.name) // Метод для удаления из избранного
+                    removeDialog.open() // Показываем сообщение
+                }
+            }
+        }
+    }
+
+    // Диалог успешного добавления
+    Dialog {
+        id: favoriteDialog
+        modal: true
+        title: "Уведомление"
+
         Text {
-            text: itemData.name || "Название неизвестно"
-            font.pixelSize: 30
-            font.bold: true
-            color: "black"
-            horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Элемент добавлен в избранное!"
+            font.pixelSize: 16
         }
 
-        // Изображение инструмента
-        Image {
-            source: itemData.imagePath
-            width: 400
-            height: 400
-            fillMode: Image.PreserveAspectFit
-            anchors.horizontalCenter: parent.horizontalCenter
+        footer: Button {
+            text: "OK"
+            width: 150
+            height: 50
+            onClicked: favoriteDialog.close()
         }
+        standardButtons: Dialog.Ok
+    }
 
-        // Описание
+    // Диалог успешного удаления
+    Dialog {
+        id: removeDialog
+        modal: true
+        title: "Уведомление"
+
         Text {
-            text: itemData.description || "Описание отсутствует"
-            wrapMode: Text.WordWrap
-            font.pixelSize: 18
-            color: "gray"
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
+            text: "Элемент удалён из избранного!"
+            font.pixelSize: 16
         }
 
-        // Производители
-        Text {
-            text: "Производители: " + (itemData.manufacturers ? itemData.manufacturers.join(", ") : "Не указано")
-            wrapMode: Text.WordWrap
-            font.pixelSize: 18
-            color: "black"
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
+        footer: Button {
+            text: "OK"
+            onClicked: removeDialog.close()
         }
-
-        // Цена
-        Text {
-            text: "Цена: " + (itemData.price || "Не указана") + " $."
-            font.pixelSize: 20
-            color: "green"
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-        Button {
-            text: "Назад"
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: stackView.pop()
-        }
+        standardButtons: Dialog.Ok
     }
 }
