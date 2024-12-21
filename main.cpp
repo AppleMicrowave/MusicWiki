@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
 
     // Создаем объект DBManager
     DBManager dbManager(dbPath);
-
     engine.rootContext()->setContextProperty("dbManager", &dbManager);
 
     engine.loadFromModule("MusicWiki", "Main");

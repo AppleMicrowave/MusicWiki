@@ -26,7 +26,6 @@ qt_add_qml_module(appMusicWiki
         SOURCES dbmanager.h dbmanager.cpp
         SOURCES itemmodel.h itemmodel.cpp
         RESOURCES qml.qrc
-        RESOURCES
         RESOURCES images/stratocaster.png
         RESOURCES images/yamaha_c40.png
         RESOURCES images/dw_performance_tom.png images/eastman_md315.png images/martin_d28.png images/meinl_cowbell.png images/pearl_export.png images/precision_bass.png images/prs_se_custom_24.png images/roland_td17kv.png images/stagg_edb.png images/stentor_student1.png images/stratocaster.png images/yamaha_c40.png images/yamaha_v3.png images/yamaha_va7.png images/zildjian_acustom.png
