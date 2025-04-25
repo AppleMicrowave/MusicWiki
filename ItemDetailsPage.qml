@@ -38,7 +38,8 @@ Page {
 
             // Описание инструмента
             ColumnLayout {
-                spacing: 10
+                spacing: 50
+                Layout.maximumWidth: 200
 
                 Text {
                     text: "Тип: " + itemData.type
@@ -69,9 +70,10 @@ Page {
                 }
 
                 Text {
-                    text: "Описание: " + itemData.description
                     wrapMode: Text.WordWrap
-
+                    maximumLineCount: 3
+                    text: "Описание: " + itemData.description
+                    Layout.preferredWidth: 600
                     font.pixelSize: 24
                     font.bold: true
                     color: "black"
@@ -96,6 +98,7 @@ Page {
 
             Button {
                 text: "+"
+                font.pixelSize: 64
                 width: 100
                 height: 50
                 onClicked: {
@@ -106,6 +109,7 @@ Page {
 
             Button {
                 text: "⟳"
+                font.pixelSize: 64
                 width: 100
                 height: 50
                 onClicked: stackView.pop() // Возврат в меню
@@ -113,6 +117,7 @@ Page {
 
             Button {
                 text: "-"
+                font.pixelSize: 64
                 width: 100
                 height: 50
                 onClicked: {

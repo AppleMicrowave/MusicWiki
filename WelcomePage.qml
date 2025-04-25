@@ -40,7 +40,7 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
 
             Text {
-                text: "Search"
+                text: "WELCOME"
                 anchors.centerIn: parent
                 font.pixelSize: 18
                 font.bold: true
